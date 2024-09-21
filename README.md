@@ -7,12 +7,12 @@
 3. That's all the instalation of dlib!
 ## Some commands:
 ```
-dlib test
+dlib cb8
 dlib https://some-lib-web.org/install.ds
 dlib project/hello-world.ds
 dlib //version
 ```
-The first one searched for a script called `test` at the `@elitees/dlib-index` GitHub repository and runned it.
+The first one searched for a script called `cb8` at the `@elitees/dlib-index` GitHub repository and runned it.
 
 The second one searched for a file called `install.ds` on internet at `https://some-lib-web.org/` and runned it.
 

@@ -14,6 +14,7 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
+#include <conio.h>
 #ifdef _WIN32
     #include <windows.h>
     #include <wininet.h>
@@ -149,7 +150,7 @@ std::vector<std::string> splitString(const std::string& input, char delimiter) {
 }
 
 void displayProgressBar(double percentage) {
-    int barWidth = 40;  // Width of the progress bar
+    int barWidth = 35;  // Width of the progress bar
     std::cout << "[";
     int pos = static_cast<int>(barWidth * percentage);
     for (int i = 0; i < barWidth; ++i) {
@@ -220,7 +221,7 @@ bool downloadFileWithProgress(const std::string& url, const std::string& localFi
 
 
         // Print progress line
-        std::cout << "Downloading " << url << ":"
+        std::cout << "Downloading " << url << " to " << localFile << ":"
                   << " Size: " << fileSize / (1024 * 1024) << " MB"
                   << " D. Speed: ";
         if(speedIncreased) {
@@ -228,7 +229,7 @@ bool downloadFileWithProgress(const std::string& url, const std::string& localFi
         } else {
             cout << ASCII_RED << ASCII_BOLD;
         }
-        cout << std::fixed << std::setprecision(2) << downloadSpeed / (1024 * 1024) << " MB/s";
+        cout << std::fixed << std::setprecision(2) << downloadSpeed / (1024) << " KB/s";
         cout << ASCII_RESET
                   << " Time left: " << int(remainingTime) << " sec"
                   << " Remaining: " << (fileSize - totalDownloaded) / (1024 * 1024) << " MB ";
@@ -262,6 +263,13 @@ void runLine(string line) {
         string com = "mkdir " + line.substr(6);
 
         system(com.c_str());
+    } else if(line == "check") {
+        cout << "Do you want to continue? (y=yes)";
+
+        if(_getch() != 'y') {
+            exit(0);
+        }
+        cout << "\n";
     } else {
         cout << ASCII_BOLD << ASCII_RED << "Error: " << ASCII_RESET << ASCII_RED << "UnknownCommand: " << line << ASCII_RESET << endl;
     }
@@ -281,7 +289,7 @@ int main(int argc, char** argv) {
         if(n == "//version") {
             cout << ASCII_BOLD << "dlib prerelease v_0.1" << ASCII_RESET << endl;
             cout << "Checking for updates...\n";
-            if(readFileFromInternet("https://elitees.github.io/dlib-index/version") == "prerelease v_0.1\n") {
+            if(readFileFromInternet("https://elitees.github.io/dlib-index/version") == "prerelease v_0.2\n") {
                 cout << ASCII_BOLD << "All is up-to-date.\n" << ASCII_RESET;
             } else {
                 cout << ASCII_UNDERLINE << ASCII_RED << "New update avaiable, consider updating to get new security and new functions." << ASCII_RESET << "\n";
