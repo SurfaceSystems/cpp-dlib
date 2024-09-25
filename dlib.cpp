@@ -287,9 +287,9 @@ int main(int argc, char** argv) {
         string n(argv[1]);
 
         if(n == "//version") {
-            cout << ASCII_BOLD << "dlib prerelease v_0.1" << ASCII_RESET << endl;
+            cout << ASCII_BOLD << "dlib prerelease v_0.3" << ASCII_RESET << endl;
             cout << "Checking for updates...\n";
-            if(readFileFromInternet("https://elitees.github.io/dlib-index/version") == "prerelease v_0.2\n") {
+            if(readFileFromInternet("https://elitees.github.io/dlib-index/version") == "prerelease v_0.3\n") {
                 cout << ASCII_BOLD << "All is up-to-date.\n" << ASCII_RESET;
             } else {
                 cout << ASCII_UNDERLINE << ASCII_RED << "New update avaiable, consider updating to get new security and new functions." << ASCII_RESET << "\n";
