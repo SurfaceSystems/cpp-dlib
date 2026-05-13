@@ -1,5 +1,5 @@
 # e-dlib
- Library and program downloader from terminal.
+Library and program downloader from terminal.
 
 ## Usage:
 1. Download `dlib.exe` file from releases tab.
@@ -21,7 +21,7 @@ The third one searched for a file called `hello-world.ds` at the folder `project
 You can check dlib version by running `dlib //version`, so be careful to not name a file `//version`.
 
 ## Help and documentation
-I'm working to do a documentation and help web at `https://e--dlib.web.app`. So currently there's no documentation.
+More help about how to create `.ds` files comming soon.
 
 ## License
 This project is licensed with GNU GPL v3.
