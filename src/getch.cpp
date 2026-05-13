@@ -45,7 +45,7 @@ int getch()
 }
 
 // Windows-like alias 
- int _getch()
+int _getch()
 {
     return getch();
 }

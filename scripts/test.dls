@@ -1,0 +1,9 @@
+# DLib Test Script
+
+- msg "Hello World!"
+- mkdir "folder"
+- download:
+ - from "https://ash-speed.hetzner.com/100MB.bin"
+ - to "folder/100MB.bin"
+- msg "Download Finished!"
+

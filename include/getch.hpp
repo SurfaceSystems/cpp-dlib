@@ -1,7 +1,5 @@
-#ifndef GETCH_HPP
-#define GETCH_HPP
+#pragma once
 
 int getch();
 int _getch();
 
-#endif
