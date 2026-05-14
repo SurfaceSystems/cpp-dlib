@@ -36,7 +36,7 @@ std::vector<Instruction> parse(const std::string& text) {
 			ins.args.push_back(arg);
 		}
 
-		if(Commands::howManyArgs(ins.name) > ins.args.size()) {
+		if (static_cast<size_t>(Commands::howManyArgs(ins.name)) > ins.args.size()) {
 			throw NotMinimunArgs(lineNumber, "Needed " + std::to_string(Commands::howManyArgs(ins.name)) + " arguments but found " + std::to_string(ins.args.size()));
 		}
 		
