@@ -1,6 +1,8 @@
 #include "parser.hpp"
 
 #include <iomanip>
+#include "exceptions.hpp"
+#include "executor.hpp"
 
 std::vector<Instruction> parse(const std::string& text) {
 	std::vector<Instruction> program;
@@ -8,14 +10,26 @@ std::vector<Instruction> parse(const std::string& text) {
 	std::istringstream stream(text);
 	std::string line;
 
+	int lineNumber = 1;
+
 	while(std::getline(stream, line)) {
 		if(line.empty()) continue;
-		if(line.c_str()[0] == '#') continue;
+		if(line[0] == '#') continue;
+
+		if(line.substr(0,2) != "- ") {
+			throw InvalidCommand(lineNumber, "Invalid command: " + line);
+		}
+
+		line = line.substr(2);
 
 		std::istringstream ls(line);
 
 		Instruction ins;
 		ls >> ins.name;
+
+		if(!Commands::isValid(ins.name)) {
+			throw InvalidCommand(lineNumber, "Unknown command: " + ins.name);
+		}
 
 		std::string arg;
 		while(ls >> std::quoted(arg)) {
@@ -23,6 +37,8 @@ std::vector<Instruction> parse(const std::string& text) {
 		}
 
 		program.push_back(ins);
+
+		lineNumber++;
 	}
 
 	return program;
