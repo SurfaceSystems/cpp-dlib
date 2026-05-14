@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <functional>
 #include <cstdlib>
+#include "progress.hpp"
 
 Executor::Executor() {
 
@@ -14,6 +15,10 @@ Executor::Executor() {
 
 	handlers["mkdir"] = [](const Instruction& ins) {
 		system(("mkdir " + ins.args[0]).c_str());
+	};
+
+	handlers["download"] = [](const Instruction& ins) {
+		downloadFileWithProgress(ins.args[0], ins.args[1]);
 	};
 
 }

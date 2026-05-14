@@ -1,7 +1,5 @@
 #include "progress.hpp"
 
-#include "colors.hpp"
-
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -16,173 +14,174 @@
 
 void displayProgressBar(double progress)
 {
-    const int width = 40;
+	const int width = 40;
 
-    std::cout << "[";
+	std::cout << "[";
 
-    int pos = width * progress;
+	int pos = width * progress;
 
-    for (int i = 0; i < width; ++i)
-    {
-        if (i < pos)
-            std::cout << "=";
-        else if (i == pos)
-            std::cout << ">";
-        else
-            std::cout << " ";
-    }
+	for (int i = 0; i < width; ++i)
+	{
+		if (i < pos)
+			std::cout << "=";
+		else if (i == pos)
+			std::cout << ">";
+		else
+			std::cout << " ";
+	}
 
-    std::cout << "] "
-              << int(progress * 100.0)
-              << "%";
+	std::cout << "] "
+			  << int(progress * 100.0)
+			  << "%";
 }
 
 bool downloadFileWithProgress(
-    const std::string& url,
-    const std::string& localFile)
-{
-    HINTERNET hInternet =
-        InternetOpen(
-            "Downloader",
-            INTERNET_OPEN_TYPE_DIRECT,
-            NULL,
-            NULL,
-            0
-        );
+	const std::string& url,
+	const std::string& localFile) {
+	std::cout << "Downloading " << url << " to " << localFile << std::endl;
 
-    if (!hInternet)
-    {
-        std::cerr << "InternetOpen failed\n";
-        return false;
-    }
+	HINTERNET hInternet =
+		InternetOpen(
+			"Downloader",
+			INTERNET_OPEN_TYPE_DIRECT,
+			NULL,
+			NULL,
+			0
+		);
 
-    HINTERNET hUrl =
-        InternetOpenUrl(
-            hInternet,
-            url.c_str(),
-            NULL,
-            0,
-            INTERNET_FLAG_RELOAD,
-            0
-        );
+	if (!hInternet)
+	{
+		std::cerr << "InternetOpen failed\n";
+		return false;
+	}
 
-    if (!hUrl)
-    {
-        std::cerr << "InternetOpenUrl failed\n";
+	HINTERNET hUrl =
+		InternetOpenUrl(
+			hInternet,
+			url.c_str(),
+			NULL,
+			0,
+			INTERNET_FLAG_RELOAD,
+			0
+		);
 
-        InternetCloseHandle(hInternet);
+	if (!hUrl)
+	{
+		std::cerr << "InternetOpenUrl failed\n";
 
-        return false;
-    }
+		InternetCloseHandle(hInternet);
 
-    std::ofstream file(
-        localFile,
-        std::ios::binary
-    );
+		return false;
+	}
 
-    if (!file)
-    {
-        std::cerr << "Cannot create file\n";
+	std::ofstream file(
+		localFile,
+		std::ios::binary
+	);
 
-        InternetCloseHandle(hUrl);
-        InternetCloseHandle(hInternet);
+	if (!file)
+	{
+		std::cerr << "Cannot create file\n";
 
-        return false;
-    }
+		InternetCloseHandle(hUrl);
+		InternetCloseHandle(hInternet);
 
-    DWORD fileSize = 0;
-    DWORD sizeSize = sizeof(fileSize);
+		return false;
+	}
 
-    HttpQueryInfo(
-        hUrl,
-        HTTP_QUERY_CONTENT_LENGTH |
-        HTTP_QUERY_FLAG_NUMBER,
-        &fileSize,
-        &sizeSize,
-        NULL
-    );
+	DWORD fileSize = 0;
+	DWORD sizeSize = sizeof(fileSize);
 
-    char buffer[8192];
-    DWORD bytesRead;
+	HttpQueryInfo(
+		hUrl,
+		HTTP_QUERY_CONTENT_LENGTH |
+		HTTP_QUERY_FLAG_NUMBER,
+		&fileSize,
+		&sizeSize,
+		NULL
+	);
 
-    double totalDownloaded = 0;
+	char buffer[8192];
+	DWORD bytesRead;
 
-    auto start =
-        std::chrono::steady_clock::now();
+	double totalDownloaded = 0;
 
-    while (
-        InternetReadFile(
-            hUrl,
-            buffer,
-            sizeof(buffer),
-            &bytesRead
-        ) &&
-        bytesRead > 0)
-    {
-        file.write(buffer, bytesRead);
+	auto start =
+		std::chrono::steady_clock::now();
 
-        totalDownloaded += bytesRead;
+	while (
+		InternetReadFile(
+			hUrl,
+			buffer,
+			sizeof(buffer),
+			&bytesRead
+		) &&
+		bytesRead > 0)
+	{
+		file.write(buffer, bytesRead);
 
-        auto now =
-            std::chrono::steady_clock::now();
+		totalDownloaded += bytesRead;
 
-        double elapsed =
-            std::chrono::duration<double>(
-                now - start
-            ).count();
+		auto now =
+			std::chrono::steady_clock::now();
 
-        double speed =
-            elapsed > 0
-                ? totalDownloaded / elapsed
-                : 0;
+		double elapsed =
+			std::chrono::duration<double>(
+				now - start
+			).count();
 
-        double remaining =
-            speed > 0
-                ? (fileSize - totalDownloaded)
-                    / speed
-                : 0;
+		double speed =
+			elapsed > 0
+				? totalDownloaded / elapsed
+				: 0;
 
-        double progress =
-            fileSize > 0
-                ? totalDownloaded / fileSize
-                : 0;
+		double remaining =
+			speed > 0
+				? (fileSize - totalDownloaded)
+					/ speed
+				: 0;
 
-        std::cout << "\r";
+		double progress =
+			fileSize > 0
+				? totalDownloaded / fileSize
+				: 0;
 
-        std::cout
-            << std::fixed
-            << std::setprecision(2)
-            << "Downloaded: "
-            << totalDownloaded /
-                (1024.0 * 1024.0)
-            << " MB / "
-            << fileSize /
-                (1024.0 * 1024.0)
-            << " MB ";
+		std::cout << "\r";
 
-        std::cout
-            << "Speed: "
-            << speed / 1024.0
-            << " KB/s ";
+		std::cout
+			<< std::fixed
+			<< std::setprecision(2)
+			<< "Downloaded: "
+			<< totalDownloaded /
+				(1024.0 * 1024.0)
+			<< " MB / "
+			<< fileSize /
+				(1024.0 * 1024.0)
+			<< " MB ";
 
-        std::cout
-            << "ETA: "
-            << int(remaining)
-            << " sec ";
+		std::cout
+			<< "Speed: "
+			<< speed / 1024.0
+			<< " KB/s ";
 
-        displayProgressBar(progress);
+		std::cout
+			<< "ETA: "
+			<< int(remaining)
+			<< " sec ";
 
-        std::cout << std::flush;
-    }
+		displayProgressBar(progress);
 
-    file.close();
+		std::cout << std::flush;
+	}
 
-    InternetCloseHandle(hUrl);
-    InternetCloseHandle(hInternet);
+	file.close();
 
-    std::cout << "\nDownload complete!\n";
+	InternetCloseHandle(hUrl);
+	InternetCloseHandle(hInternet);
 
-    return true;
+	std::cout << "\nDownload complete!\n";
+
+	return true;
 }
 
 #else
@@ -191,193 +190,195 @@ bool downloadFileWithProgress(
 
 void displayProgressBar(double progress)
 {
-    const int width = 40;
+	const int width = 40;
 
-    std::cout << "[";
+	std::cout << "[";
 
-    int pos = width * progress;
+	int pos = width * progress;
 
-    for (int i = 0; i < width; ++i)
-    {
-        if (i < pos)
-            std::cout << "=";
-        else if (i == pos)
-            std::cout << ">";
-        else
-            std::cout << " ";
-    }
+	for (int i = 0; i < width; ++i)
+	{
+		if (i < pos)
+			std::cout << "=";
+		else if (i == pos)
+			std::cout << ">";
+		else
+			std::cout << " ";
+	}
 
-    std::cout << "] "
-              << int(progress * 100.0)
-              << "%";
+	std::cout << "] "
+			  << int(progress * 100.0)
+			  << "%";
 }
 
 size_t writeData(
-    void* ptr,
-    size_t size,
-    size_t nmemb,
-    void* stream)
+	void* ptr,
+	size_t size,
+	size_t nmemb,
+	void* stream)
 {
-    std::ofstream* file =
-        static_cast<std::ofstream*>(stream);
+	std::ofstream* file =
+		static_cast<std::ofstream*>(stream);
 
-    file->write(
-        static_cast<char*>(ptr),
-        size * nmemb
-    );
+	file->write(
+		static_cast<char*>(ptr),
+		size * nmemb
+	);
 
-    return size * nmemb;
+	return size * nmemb;
 }
 
 struct ProgressData
 {
-    std::chrono::steady_clock::time_point start;
+	std::chrono::steady_clock::time_point start;
 };
 
 int progressCallback(
-    void* clientp,
-    curl_off_t total,
-    curl_off_t now,
-    curl_off_t,
-    curl_off_t)
+	void* clientp,
+	curl_off_t total,
+	curl_off_t now,
+	curl_off_t,
+	curl_off_t)
 {
-    ProgressData* data =
-        static_cast<ProgressData*>(clientp);
+	ProgressData* data =
+		static_cast<ProgressData*>(clientp);
 
-    double elapsed =
-        std::chrono::duration<double>(
-            std::chrono::steady_clock::now()
-            - data->start
-        ).count();
+	double elapsed =
+		std::chrono::duration<double>(
+			std::chrono::steady_clock::now()
+			- data->start
+		).count();
 
-    double speed =
-        elapsed > 0
-            ? now / elapsed
-            : 0;
+	double speed =
+		elapsed > 0
+			? now / elapsed
+			: 0;
 
-    double remaining =
-        speed > 0
-            ? (total - now) / speed
-            : 0;
+	double remaining =
+		speed > 0
+			? (total - now) / speed
+			: 0;
 
-    double progress =
-        total > 0
-            ? (double)now / total
-            : 0;
+	double progress =
+		total > 0
+			? (double)now / total
+			: 0;
 
-    std::cout << "\r";
+	std::cout << "\r";
 
-    std::cout
-        << std::fixed
-        << std::setprecision(2)
-        << "Downloaded: "
-        << now / (1024.0 * 1024.0)
-        << " MB / "
-        << total / (1024.0 * 1024.0)
-        << " MB ";
+	std::cout
+		<< std::fixed
+		<< std::setprecision(2)
+		<< "Downloaded: "
+		<< now / (1024.0 * 1024.0)
+		<< " MB / "
+		<< total / (1024.0 * 1024.0)
+		<< " MB ";
 
-    std::cout
-        << "Speed: "
-        << speed / 1024.0
-        << " KB/s ";
+	std::cout
+		<< "Speed: "
+		<< speed / 1024.0
+		<< " KB/s ";
 
-    std::cout
-        << "ETA: "
-        << int(remaining)
-        << " sec ";
+	std::cout
+		<< "ETA: "
+		<< int(remaining)
+		<< " sec ";
 
-    displayProgressBar(progress);
+	displayProgressBar(progress);
 
-    std::cout << std::flush;
+	std::cout << std::flush;
 
-    return 0;
+	return 0;
 }
 
 bool downloadFileWithProgress(
-    const std::string& url,
-    const std::string& localFile)
+	const std::string& url,
+	const std::string& localFile)
 {
-    CURL* curl = curl_easy_init();
+	std::cout << "Downloading " << url << " to " << localFile << std::endl;
 
-    if (!curl)
-    {
-        std::cerr << "curl init failed\n";
-        return false;
-    }
+	CURL* curl = curl_easy_init();
 
-    std::ofstream file(
-        localFile,
-        std::ios::binary
-    );
+	if (!curl)
+	{
+		std::cerr << "curl init failed\n";
+		return false;
+	}
 
-    if (!file)
-    {
-        std::cerr << "Cannot create file\n";
+	std::ofstream file(
+		localFile,
+		std::ios::binary
+	);
 
-        curl_easy_cleanup(curl);
+	if (!file)
+	{
+		std::cerr << "Cannot create file\n";
 
-        return false;
-    }
+		curl_easy_cleanup(curl);
 
-    ProgressData data;
-    data.start =
-        std::chrono::steady_clock::now();
+		return false;
+	}
 
-    curl_easy_setopt(
-        curl,
-        CURLOPT_URL,
-        url.c_str());
+	ProgressData data;
+	data.start =
+		std::chrono::steady_clock::now();
 
-    curl_easy_setopt(
-        curl,
-        CURLOPT_WRITEFUNCTION,
-        writeData);
+	curl_easy_setopt(
+		curl,
+		CURLOPT_URL,
+		url.c_str());
 
-    curl_easy_setopt(
-        curl,
-        CURLOPT_WRITEDATA,
-        &file);
+	curl_easy_setopt(
+		curl,
+		CURLOPT_WRITEFUNCTION,
+		writeData);
 
-    curl_easy_setopt(
-        curl,
-        CURLOPT_NOPROGRESS,
-        0L);
+	curl_easy_setopt(
+		curl,
+		CURLOPT_WRITEDATA,
+		&file);
 
-    curl_easy_setopt(
-        curl,
-        CURLOPT_XFERINFOFUNCTION,
-        progressCallback);
+	curl_easy_setopt(
+		curl,
+		CURLOPT_NOPROGRESS,
+		0L);
 
-    curl_easy_setopt(
-        curl,
-        CURLOPT_XFERINFODATA,
-        &data);
+	curl_easy_setopt(
+		curl,
+		CURLOPT_XFERINFOFUNCTION,
+		progressCallback);
 
-    curl_easy_setopt(
-        curl,
-        CURLOPT_FOLLOWLOCATION,
-        1L);
+	curl_easy_setopt(
+		curl,
+		CURLOPT_XFERINFODATA,
+		&data);
 
-    CURLcode res =
-        curl_easy_perform(curl);
+	curl_easy_setopt(
+		curl,
+		CURLOPT_FOLLOWLOCATION,
+		1L);
 
-    file.close();
+	CURLcode res =
+		curl_easy_perform(curl);
 
-    curl_easy_cleanup(curl);
+	file.close();
 
-    if (res != CURLE_OK)
-    {
-        std::cerr
-            << "\nDownload failed: "
-            << curl_easy_strerror(res)
-            << "\n";
+	curl_easy_cleanup(curl);
 
-        return false;
-    }
+	if (res != CURLE_OK)
+	{
+		std::cerr
+			<< "\nDownload failed: "
+			<< curl_easy_strerror(res)
+			<< "\n";
 
-    std::cout << "\nDownload complete!\n";
+		return false;
+	}
 
-    return true;
+	std::cout << "\nDownload complete!\n";
+
+	return true;
 }
 
 #endif

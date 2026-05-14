@@ -9,7 +9,7 @@
 namespace Commands {
 	inline const std::unordered_set<std::string> validCommands = 
 	{
-		"msg"
+		"msg", "mkdir", "download"
 	};
     
 	inline bool isValid(const std::string& cmd) {
