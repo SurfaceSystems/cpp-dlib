@@ -56,20 +56,20 @@ int main(int argc, char** argv) {
 
 	if(command == "--help") {
 		// Show a list of commands for the user to know how to use dlib
-		std::cout << "dlib " << ASCII_CYAN << VERSION << ASCII_RESET << " (c) " << YEAR << " Blas Fernández" << std::endl;
+		std::cout << "dlib " << ASCII_MAGENTA << VERSION << ASCII_RESET << " (c) " << YEAR << " Blas Fernández" << std::endl;
 
 		Help::display();
 
 		return 0;
 	} else if(command == "--version") {
 		std::cout << "┌─────┐" << std::endl
-			  << "│  ▼  │" << std::endl
-			  << "│  ▼  │" << std::endl
-			  << "│  ▼  │" << std::endl
+			  << "│  ▼  │ dlib" << std::endl
+			  << "│  ▼  │ library and program downloader" << std::endl
+			  << "│  ▼  │ " << ASCII_MAGENTA << VERSION << ASCII_RESET << std::endl
 			  << "│  █  │" << std::endl
 			  << "└─────┘" << std::endl;
 		
-		std::cout << "dlib " << ASCII_CYAN << VERSION << ASCII_RESET << " Copyright (C) " << YEAR << "  Blas Fernández" << std::endl
+		std::cout << "dlib " << ASCII_MAGENTA << VERSION << ASCII_RESET << " Copyright (C) " << YEAR << "  Blas Fernández" << std::endl
 			  << "This program comes with ABSOLUTELY NO WARRANTY." << std::endl
 			  << "This is free software, and you are welcome to redistribute it" << std::endl
 			  << "under certain conditions. See LICENSE file for details." << std::endl;
