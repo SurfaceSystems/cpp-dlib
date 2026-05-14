@@ -17,6 +17,7 @@
 #include "colors.hpp"
 #include "exceptions.hpp"
 #include "utils.hpp"
+#include "help.hpp"
 
 int run(const std::string& program) {
 	std::vector<Instruction> parsedProgram;
@@ -57,6 +58,8 @@ int main(int argc, char** argv) {
 		// Show a list of commands for the user to know how to use dlib
 		std::cout << "dlib " << ASCII_CYAN << VERSION << ASCII_RESET << " (c) " << YEAR << " Blas Fernández" << std::endl;
 
+		Help::display();
+
 		return 0;
 	} else if(command == "--version") {
 		std::cout << "┌─────┐" << std::endl
@@ -72,11 +75,9 @@ int main(int argc, char** argv) {
 			  << "under certain conditions. See LICENSE file for details." << std::endl;
 
 		return 0;
-	} else if(command == "--net") {
 	} else if(command == "--repository") {
 	} else if(command == "--debug") {
-	} else if(command == "--package") {
-	}
+	}	
 
 	if(File::exists(command)) {
 		// Run a file
