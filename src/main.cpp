@@ -16,29 +16,34 @@
 #include "version.hpp"
 #include "colors.hpp"
 #include "exceptions.hpp"
+#include "utils.hpp"
+
+int run(const std::string& program) {
+	std::vector<Instruction> parsedProgram;
+
+	try {
+		parsedProgram = parse(program);
+	} catch(InvalidCommand& e) {
+		Log::error(e.what());
+		return -1;
+	}		
+
+	if(parsedProgram.empty()) {
+		Log::error("That program is empty.");
+		return -1;
+	}
+
+	Executor executor;
+	
+	for(const Instruction& ins : parsedProgram) {
+		executor.execute(ins);
+	}
+
+	return 0;
+}
 
 // Main method
 int main(int argc, char** argv) {
-
-	std::string program = "- down \"hello world\"";
-
-	std::vector<Instruction> parsedProgram;
-
- 	try {
-		parsedProgram = parse(program);
-	} catch(const InvalidCommand& e) {
-		Log::error(e.what());
-		return -1;
-	}
-	Executor executor;
-
-	executor.execute(parsedProgram[0]);
-
-
-	return 0;
-
-
-
 	// Check if no arguments were introduced by running dlib
 	if(argc < 2) {
 		Log::error("No argument was introduced. At least one is required.");
@@ -70,9 +75,21 @@ int main(int argc, char** argv) {
 	} else if(command == "--net") {
 	} else if(command == "--repository") {
 	} else if(command == "--debug") {
-	} else if(command == "--package") {} 
+	} else if(command == "--package") {
+	}
 
+	if(File::exists(command)) {
+		// Run a file
+		std::string program = File::read(command);
+	
+		return run(program);
+	} else if(Net::exists(command)) {
+		// Run a script from the internet
+		std::string program = Net::read(command);
 
+		return run(program);
+	}
+ 
 	// An invalid command was introduced
 	Log::error("Unknown command: " + command);
 	Log::info("Use \"dlib --help\" to get a list of commands.");

@@ -16,7 +16,7 @@
 
 using namespace std;
 
-bool fileExistsOnInternet(const std::string& url) {
+bool Net::exists(const std::string& url) {
 #ifdef _WIN32
 	// Windows-specific code using WinINet API
 	HINTERNET hInternet = InternetOpen("HTTP Checker", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
@@ -61,7 +61,7 @@ size_t write_callback(void* contents,
 }
 #endif
 
-std::string readFileFromInternet(const std::string& url) {
+std::string Net::read(const std::string& url) {
 #ifdef _WIN32
 	// Initialize an internet session
 	HINTERNET hInternet = InternetOpen("File Reader", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
@@ -132,8 +132,22 @@ std::vector<std::string> splitString(const std::string& input, char delimiter) {
 	return result;
 }
 
-bool fileExists(std::string filename) {
+bool File::exists(const std::string& filename) {
 	fstream f(filename);
 	return f.good();
+}
+
+std::string File::read(const std::string& filename) {
+	fstream file(filename);
+
+	std::string line, result = "";
+
+	while(getline(file, line)) {
+		result += line;
+	}
+
+	file.close();
+
+	return result;
 }
 
