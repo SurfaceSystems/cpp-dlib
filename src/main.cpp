@@ -27,6 +27,9 @@ int run(const std::string& program) {
 	} catch(InvalidCommand& e) {
 		Log::error(e.what());
 		return -1;
+	} catch(NotMinimunArgs& e) {
+		Log::error(e.what());
+		return -1;
 	}		
 
 	if(parsedProgram.empty()) {

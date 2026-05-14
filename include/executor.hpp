@@ -4,17 +4,26 @@
 #include <unordered_map>
 #include <functional>
 #include "instruction.hpp"
-#include <unordered_set>
 
 namespace Commands {
-	inline const std::unordered_set<std::string> validCommands = 
-	{
-		"msg", "mkdir", "download"
+	inline const std::unordered_map<std::string, int> commandArgs = {
+		{"msg", 1},
+		{"mkdir", 1},
+		{"download", 2},
+		{"run", 1}
 	};
-    
+
 	inline bool isValid(const std::string& cmd) {
-		return validCommands.find(cmd) != validCommands.end();
+		return commandArgs.find(cmd) != commandArgs.end();
 	}
+
+	inline int howManyArgs(const std::string& cmd) {
+		auto it = commandArgs.find(cmd);
+		if (it != commandArgs.end()) {
+			return it->second;
+		}
+		return -1;
+	}	
 }
 
 class Executor {

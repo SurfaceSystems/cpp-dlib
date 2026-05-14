@@ -21,6 +21,10 @@ Executor::Executor() {
 		downloadFileWithProgress(ins.args[0], ins.args[1]);
 	};
 
+	handlers["run"] = [](const Instruction& ins) {
+		system(ins.args[0].c_str());
+	};
+
 }
 
 void Executor::execute(const Instruction& ins) {
