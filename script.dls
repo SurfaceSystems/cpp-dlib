@@ -1,3 +1,6 @@
+- info "Starting script.dls..."
+- warning "Only works if you have dlib installed"
 - msg "hello world!"
-- download "https://ash-speed.hetzner.com/100MB.bin"
+- download "https://ash-speed.hetzner.com/100MB.bin" "test.bin"
 - msg "hwlloe"
+- error "The script finished"

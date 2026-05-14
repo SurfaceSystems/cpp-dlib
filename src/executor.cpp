@@ -6,6 +6,7 @@
 #include <functional>
 #include <cstdlib>
 #include "progress.hpp"
+#include "log.hpp"
 
 Executor::Executor() {
 
@@ -23,6 +24,22 @@ Executor::Executor() {
 
 	handlers["run"] = [](const Instruction& ins) {
 		system(ins.args[0].c_str());
+	};
+
+	handlers["info"] = [](const Instruction& ins) {
+		Log::info(ins.args[0]);
+	};
+
+	handlers["warning"] = [](const Instruction& ins) {
+		Log::warning(ins.args[0]);
+	};
+
+	handlers["error"] = [](const Instruction& ins) {
+		Log::error(ins.args[0]);
+	};
+
+	handlers["log"] = [](const Instruction& ins) {
+		LogFile::log(ins.args[0]);
 	};
 
 }

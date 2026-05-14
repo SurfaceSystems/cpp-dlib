@@ -10,7 +10,11 @@ namespace Commands {
 		{"msg", 1},
 		{"mkdir", 1},
 		{"download", 2},
-		{"run", 1}
+		{"run", 1},
+		{"info", 1},
+		{"warning", 1},
+		{"error", 1},
+		{"log", 1}
 	};
 
 	inline bool isValid(const std::string& cmd) {
