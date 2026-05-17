@@ -8,6 +8,7 @@
 #include "progress.hpp"
 #include "log.hpp"
 #include "filesystem.hpp"
+#include "evaluator.hpp"
 
 Executor::Executor() {
 
@@ -70,12 +71,21 @@ Executor::Executor() {
 }
 
 void Executor::execute(const Instruction& ins) {
-	auto it = handlers.find(ins.name);
-
-	if (it != handlers.end()) {
-		it->second(ins);
-	} else {
-		std::cout << "Unknown command: " << ins.name << std::endl;
-	}
+    Instruction finalInstruction;
+    finalInstruction.name = ins.name;
+    
+    Evaluator evaluator;
+    
+    for (const auto& arg : ins.args) {
+        std::string evaluated = evaluator.eval(arg);
+        finalInstruction.args.push_back(evaluated);
+    }
+    
+    auto it = handlers.find(ins.name);
+    if (it != handlers.end()) {
+        it->second(finalInstruction);
+    } else {
+        std::cout << "Unknown command: " << ins.name << std::endl;
+    }
 }
 

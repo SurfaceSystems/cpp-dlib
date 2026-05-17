@@ -233,79 +233,79 @@ size_t writeData(
 }
 
 struct ProgressData {
-    std::chrono::steady_clock::time_point start;
-    std::chrono::steady_clock::time_point lastUpdate;
-    curl_off_t lastNow = 0;
-    double lastSpeed = 0;
-    std::string lastColor = ASCII_GREEN;
-    int stableCounter = 0;
+	std::chrono::steady_clock::time_point start;
+	std::chrono::steady_clock::time_point lastUpdate;
+	curl_off_t lastNow = 0;
+	double lastSpeed = 0;
+	std::string lastColor = ASCII_GREEN;
+	int stableCounter = 0;
 };
 
 int progressCallback(
-    void* clientp,
-    curl_off_t total,
-    curl_off_t now,
-    curl_off_t,
-    curl_off_t)
+	void* clientp,
+	curl_off_t total,
+	curl_off_t now,
+	curl_off_t,
+	curl_off_t)
 {
-    ProgressData* data = static_cast<ProgressData*>(clientp);
-    
-    auto now_time = std::chrono::steady_clock::now();
-    
-    auto time_since_last = std::chrono::duration<double>(now_time - data->lastUpdate).count();
-    if (time_since_last < 0.1 && data->lastNow != 0) {
-        return 0;
-    }
-    
-    double instantSpeed = 0;
-    if (data->lastNow != 0 && time_since_last > 0) {
-        double bytesSinceLast = now - data->lastNow;
-        instantSpeed = bytesSinceLast / time_since_last;
-    }
-    
-    double elapsed = std::chrono::duration<double>(now_time - data->start).count();
-    double avgSpeed = elapsed > 0 ? now / elapsed : 0;
-    
-    double remaining = instantSpeed > 0 ? (total - now) / instantSpeed : 0;
-    double progress = total > 0 ? (double)now / total : 0;
-    
-    std::string speedColor = ASCII_GREEN;
-    if (data->lastSpeed > 0) {
-        double ratio = instantSpeed / data->lastSpeed;
-        if (ratio < 0.95) {
-            speedColor = ASCII_RED;
-        } else if (ratio > 1.05) {
-            speedColor = ASCII_GREEN;
-        } else {
-            speedColor = data->lastColor;
-        }
-    }
-    
-    data->lastSpeed = instantSpeed;
-    data->lastColor = speedColor;
-    data->lastUpdate = now_time;
-    data->lastNow = now;
-    
-    std::cout << "\r"
-              << std::fixed << std::setprecision(2)
-              << "Downloaded: " << now / (1024.0 * 1024.0) << " MB / "
-              << total / (1024.0 * 1024.0) << " MB ";
-    
-    std::cout << "Speed: " << speedColor;
-    
-    if (instantSpeed > 1024 * 1024) {
-        std::cout << std::setprecision(2) << instantSpeed / (1024.0 * 1024.0) << " MB/s ";
-    } else {
-        std::cout << std::setprecision(2) << instantSpeed / 1024.0 << " KB/s ";
-    }
-    
-    std::cout << ASCII_RESET
-              << "ETA: " << int(remaining) << " sec                                  ";
-    
-    displayProgressBar(progress);
-    std::cout << std::flush;
-    
-    return 0;
+	ProgressData* data = static_cast<ProgressData*>(clientp);
+	
+	auto now_time = std::chrono::steady_clock::now();
+	
+	auto time_since_last = std::chrono::duration<double>(now_time - data->lastUpdate).count();
+	if (time_since_last < 0.1 && data->lastNow != 0) {
+		return 0;
+	}
+	
+	double instantSpeed = 0;
+	if (data->lastNow != 0 && time_since_last > 0) {
+		double bytesSinceLast = now - data->lastNow;
+		instantSpeed = bytesSinceLast / time_since_last;
+	}
+	
+	double elapsed = std::chrono::duration<double>(now_time - data->start).count();
+	double avgSpeed = elapsed > 0 ? now / elapsed : 0;
+	
+	double remaining = instantSpeed > 0 ? (total - now) / instantSpeed : 0;
+	double progress = total > 0 ? (double)now / total : 0;
+	
+	std::string speedColor = ASCII_GREEN;
+	if (data->lastSpeed > 0) {
+		double ratio = instantSpeed / data->lastSpeed;
+		if (ratio < 0.95) {
+			speedColor = ASCII_RED;
+		} else if (ratio > 1.05) {
+			speedColor = ASCII_GREEN;
+		} else {
+			speedColor = data->lastColor;
+		}
+	}
+	
+	data->lastSpeed = instantSpeed;
+	data->lastColor = speedColor;
+	data->lastUpdate = now_time;
+	data->lastNow = now;
+	
+	std::cout << "\r"
+			  << std::fixed << std::setprecision(2)
+			  << "Downloaded: " << now / (1024.0 * 1024.0) << " MB / "
+			  << total / (1024.0 * 1024.0) << " MB ";
+	
+	std::cout << "Speed: " << speedColor;
+	
+	if (instantSpeed > 1024 * 1024) {
+		std::cout << std::setprecision(2) << instantSpeed / (1024.0 * 1024.0) << " MB/s ";
+	} else {
+		std::cout << std::setprecision(2) << instantSpeed / 1024.0 << " KB/s ";
+	}
+	
+	std::cout << ASCII_RESET
+			  << "ETA: " << int(remaining) << " sec	                      ";
+	
+	displayProgressBar(progress);
+	std::cout << std::flush;
+	
+	return 0;
 }
 
 bool downloadFileWithProgress(
