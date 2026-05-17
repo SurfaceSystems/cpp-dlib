@@ -19,6 +19,11 @@ void Log::error(const std::string& msg) {
 	std::cout << ASCII_RED << ASCII_BOLD << "[ERR] " << ASCII_RESET << ASCII_RED << msg << ASCII_RESET << std::endl;
 }
 
+void Log::success(const std::string& msg) {
+	std::cout << ASCII_GREEN << ASCII_BOLD << "[SUC] " << ASCII_RESET << ASCII_GREEN << msg << ASCII_RESET << std::endl;
+}
+
+
 void LogFile::log(const std::string& msg) {
 	std::fstream file("dlib.log");
 

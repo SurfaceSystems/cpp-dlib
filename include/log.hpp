@@ -7,6 +7,7 @@ namespace Log {
 	void info(const std::string& msg);
 	void warning(const std::string& msg);
 	void error(const std::string& msg);
+	void success(const std::string& msg);
 }
 
 namespace LogFile {
