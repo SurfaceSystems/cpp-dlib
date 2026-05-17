@@ -3,4 +3,9 @@
 - msg "hello world!"
 - download "https://ash-speed.hetzner.com/100MB.bin" "test.bin"
 - msg "hwlloe"
+
+- mkdir "foo"
+- write "foo/text.txt" "hello world!"
+- append "foo/text.txt" "bye!"
+
 - error "The script finished"

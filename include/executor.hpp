@@ -14,7 +14,12 @@ namespace Commands {
 		{"info", 1},
 		{"warning", 1},
 		{"error", 1},
-		{"log", 1}
+		{"log", 1},
+		{"delete",1},
+		{"move", 2},
+		{"copy", 2},
+		{"write", 2},
+		{"append", 2}
 	};
 
 	inline bool isValid(const std::string& cmd) {
