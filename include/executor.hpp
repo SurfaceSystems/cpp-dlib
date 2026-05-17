@@ -19,7 +19,8 @@ namespace Commands {
 		{"move", 2},
 		{"copy", 2},
 		{"write", 2},
-		{"append", 2}
+		{"append", 2},
+		{"success", 1}
 	};
 
 	inline bool isValid(const std::string& cmd) {

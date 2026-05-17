@@ -63,6 +63,10 @@ Executor::Executor() {
 		!fs::append(ins.args[0], ins.args[1]) ? Log::error("Uneable to append text to: " + ins.args[0]) : Log::info("Succesfully appended text to: " + ins.args[0]);	
 	};
 
+	handlers["success"] = [](const Instruction& ins) {
+		Log::success(ins.args[0]);
+	};
+
 }
 
 void Executor::execute(const Instruction& ins) {
