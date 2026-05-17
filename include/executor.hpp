@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <functional>
 #include "instruction.hpp"
+#include <vector>
+#include "variable.hpp"
 
 namespace Commands {
 	inline const std::unordered_map<std::string, int> commandArgs = {
@@ -20,7 +22,8 @@ namespace Commands {
 		{"copy", 2},
 		{"write", 2},
 		{"append", 2},
-		{"success", 1}
+		{"success", 1},
+		{"set", 2}
 	};
 
 	inline bool isValid(const std::string& cmd) {
@@ -41,11 +44,15 @@ public:
 	Executor();
 
 	void execute(const Instruction& ins);
-
+	std::vector<Variable> variables;
+	
 private:
 	std::unordered_map<
 		std::string,
 		std::function<void(const Instruction&)>
 	> handlers;
+
+	Variable* findVariable(const std::string& name);
+	std::string trim(const std::string& str);
 };
 

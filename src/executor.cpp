@@ -9,6 +9,7 @@
 #include "log.hpp"
 #include "filesystem.hpp"
 #include "evaluator.hpp"
+#include <algorithm>
 
 Executor::Executor() {
 
@@ -68,24 +69,43 @@ Executor::Executor() {
 		Log::success(ins.args[0]);
 	};
 
+	handlers["set"] = [this](const Instruction& ins) {
+		Variable* existingVar = findVariable(ins.args[0]);
+		if (existingVar) {
+			existingVar->set(ins.args[1]);
+		} else {
+			variables.emplace_back(ins.args[0], ins.args[1]);
+		}
+	};	
 }
 
 void Executor::execute(const Instruction& ins) {
-    Instruction finalInstruction;
-    finalInstruction.name = ins.name;
-    
-    Evaluator evaluator;
-    
-    for (const auto& arg : ins.args) {
-        std::string evaluated = evaluator.eval(arg);
-        finalInstruction.args.push_back(evaluated);
-    }
-    
-    auto it = handlers.find(ins.name);
-    if (it != handlers.end()) {
-        it->second(finalInstruction);
-    } else {
-        std::cout << "Unknown command: " << ins.name << std::endl;
-    }
+	Instruction finalInstruction;
+	finalInstruction.name = ins.name;
+	
+	Evaluator evaluator(variables);
+		
+	for (const auto& arg : ins.args) {
+		std::string evaluated = evaluator.eval(arg);
+		finalInstruction.args.push_back(evaluated);
+	}
+	
+	auto it = handlers.find(ins.name);
+	if (it != handlers.end()) {
+		it->second(finalInstruction);
+	} else {
+		std::cout << "Unknown command: " << ins.name << std::endl;
+	}
 }
 
+Variable* Executor::findVariable(const std::string& name) {
+    auto it = std::find_if(variables.begin(), variables.end(),
+        [&name](const Variable& var) {
+            return var.getName() == name;
+        });
+
+    if (it != variables.end()) {
+        return &(*it);
+    }
+    return nullptr;
+}

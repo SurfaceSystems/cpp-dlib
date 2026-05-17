@@ -13,4 +13,10 @@
 
 - delete "foo"
 
+
+- set name,  "name"
+
+- msg "Hello, " + $name
+
+
 - error "The script finished"
