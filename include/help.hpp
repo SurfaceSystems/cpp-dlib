@@ -12,6 +12,9 @@ namespace Help {
 			"--version", "Display current dlib version."
 		},
 		{
+			"--validate <script>", "Check if a local script or in the web can be runned without problems."
+		},
+		{
 			"<.dls file>", "Run a local dlib script."
 		},
 		{

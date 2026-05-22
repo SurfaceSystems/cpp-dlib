@@ -1,4 +1,4 @@
-- set name  "name"
+- set name,  "name"
 
 - msg "Hello, " + $name
 
