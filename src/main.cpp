@@ -22,15 +22,20 @@
 int run(const std::string& program) {
 	std::vector<Instruction> parsedProgram;
 
+	Parser parser;
+
 	try {
-		parsedProgram = parse(program);
-	} catch(InvalidCommand& e) {
+		parsedProgram = parser.parse(program);
+	} catch (InvalidCommand& e) {
 		Log::error(e.what());
 		return -1;
-	} catch(NotMinimunArgs& e) {
+	} catch (NotMinimunArgs& e) {
 		Log::error(e.what());
 		return -1;
-	}		
+	} catch (std::exception& e) {
+		Log::error(e.what());
+		return -1;
+	}	
 
 	if(parsedProgram.empty()) {
 		Log::error("That program is empty.");
@@ -38,10 +43,8 @@ int run(const std::string& program) {
 	}
 
 	Executor executor;
-	
-	for(const Instruction& ins : parsedProgram) {
-		executor.execute(ins);
-	}
+
+	executor.execute(parsedProgram);
 
 	return 0;
 }

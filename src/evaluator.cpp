@@ -13,7 +13,6 @@
 Evaluator::Evaluator(const std::vector<Variable>& vars) 
 	: variables(vars) {
 	
-	// Inicializar funciones dentro del cuerpo del constructor
 	functions = {
 		{"READ", [this](const std::vector<std::string>& args) { return funcRead(args); }},
 		{"OS", [this](const std::vector<std::string>& args) { return funcOS(args); }},
@@ -33,13 +32,20 @@ Evaluator::Evaluator(const std::vector<Variable>& vars)
 
 Evaluator::~Evaluator() {}
 
-// Función principal de evaluación
 std::string Evaluator::eval(const std::string& expression) {
 	std::string expr = trim(expression);
 	
 	if (expr.empty()) return "";
-	
-	// Paso 1: Buscar operador + (concatenación)
+
+	std::vector<std::pair<std::string, std::function<bool(const std::string&, const std::string&)>>> operators = {
+		{"==", [](const std::string& a, const std::string& b) { return a == b; }},
+		{"!=", [](const std::string& a, const std::string& b) { return a != b; }},
+		{"<",  [](const std::string& a, const std::string& b) { return std::stod(a) < std::stod(b); }},
+		{"<=", [](const std::string& a, const std::string& b) { return std::stod(a) <= std::stod(b); }},
+		{">",  [](const std::string& a, const std::string& b) { return std::stod(a) > std::stod(b); }},
+		{">=", [](const std::string& a, const std::string& b) { return std::stod(a) >= std::stod(b); }}
+	};
+
 	size_t plusPos = findOperatorOutsideQuotes(expr, '+');
 	if (plusPos != std::string::npos) {
 		std::string left = expr.substr(0, plusPos);
@@ -51,27 +57,22 @@ std::string Evaluator::eval(const std::string& expression) {
 		return leftVal + rightVal;
 	}
 	
-	// Paso 2: String literal entre comillas
 	if (isQuotedString(expr)) {
 		return unescape(expr.substr(1, expr.length() - 2));
 	}
 	
-	// Paso 3: Variable $nombre
 	if (expr.front() == '$') {
 		std::string varName = expr.substr(1);
 		return getVariable(varName);
 	}
 	
-	// Paso 4: Función =NOMBRE(...)
 	if (expr.front() == '=') {
 		return evalFunction(expr);
 	}
 	
-	// Paso 5: Texto plano o número
 	return expr;
 }
 
-// Evaluar función
 std::string Evaluator::evalFunction(const std::string& funcExpr) {
 	size_t parenOpen = funcExpr.find('(');
 	if (parenOpen == std::string::npos) {
@@ -80,7 +81,6 @@ std::string Evaluator::evalFunction(const std::string& funcExpr) {
 	
 	std::string funcName = funcExpr.substr(1, parenOpen - 1);
 	
-	// Extraer argumentos
 	std::string argsStr = funcExpr.substr(parenOpen + 1);
 	if (!argsStr.empty() && argsStr.back() == ')') {
 		argsStr.pop_back();
@@ -88,12 +88,10 @@ std::string Evaluator::evalFunction(const std::string& funcExpr) {
 	
 	std::vector<std::string> args = parseArguments(argsStr);
 	
-	// Evaluar cada argumento
 	for (auto& arg : args) {
 		arg = eval(arg);
 	}
 	
-	// Ejecutar la función
 	auto it = functions.find(funcName);
 	if (it != functions.end()) {
 		return it->second(args);
@@ -102,7 +100,6 @@ std::string Evaluator::evalFunction(const std::string& funcExpr) {
 	return funcExpr;
 }
 
-// Parsear argumentos respetando comas anidadas
 std::vector<std::string> Evaluator::parseArguments(const std::string& argsStr) {
 	std::vector<std::string> args;
 	std::string current;
@@ -140,7 +137,6 @@ std::vector<std::string> Evaluator::parseArguments(const std::string& argsStr) {
 	return args;
 }
 
-// Buscar operador fuera de comillas
 size_t Evaluator::findOperatorOutsideQuotes(const std::string& str, char op) {
 	bool inQuotes = false;
 	int parenDepth = 0;
@@ -165,7 +161,6 @@ size_t Evaluator::findOperatorOutsideQuotes(const std::string& str, char op) {
 	return std::string::npos;
 }
 
-// Obtener valor de variable
 std::string Evaluator::getVariable(const std::string& name) const {
 	auto it = std::find_if(variables.begin(), variables.end(),
 		[&name](const Variable& var) {
@@ -176,10 +171,9 @@ std::string Evaluator::getVariable(const std::string& name) const {
 		return it->get();
 	}
 	
-	return "";  // Variable no encontrada
+	return "";
 }
 
-// Funciones auxiliares
 bool Evaluator::isNumber(const std::string& str) {
 	if (str.empty()) return false;
 	char* end;
@@ -217,7 +211,6 @@ std::string Evaluator::unescape(const std::string& str) {
 	return result;
 }
 
-// Implementaciones de funciones
 std::string Evaluator::funcRead(const std::vector<std::string>& args) {
 	if (args.empty()) return "";
 	std::ifstream file(args[0]);
@@ -228,7 +221,7 @@ std::string Evaluator::funcRead(const std::vector<std::string>& args) {
 }
 
 std::string Evaluator::funcOS(const std::vector<std::string>& args) {
-	(void)args;  // Supress unused parameter warning
+	(void)args;
 	#ifdef _WIN32
 		return "Windows";
 	#elif __linux__

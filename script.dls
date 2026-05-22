@@ -1,22 +1,28 @@
-- info "Starting script.dls..."
-
-- msg "OS: " + =OS() 
-
-- warning "Only works if you have dlib installed"
-- msg "hello world!"
-- download "https://ash-speed.hetzner.com/100MB.bin", "test.bin"
-- msg "hwlloe"
-
-- mkdir "foo"
-- write "foo/text.txt", "hello world!"
-- append "foo/text.txt", "bye!"
-
-- delete "foo"
-
-
-- set name,  "name"
+- set name  "name"
 
 - msg "Hello, " + $name
 
+- if $name = "name"
+- msg "nice"
+- endif
 
-- error "The script finished"
+- set edad, 18
+- if $edad = 18
+- msg "Eres mayor de edad"
+- else
+- msg "Eres menor de edad"
+- endif
+
+- if =OS() = "Linux"
+- msg "Estás en Linux"
+- else
+- msg "Estás en otro SO"
+- endif
+
+- set i, 5
+- if $i > 0
+- if $i < 10
+- msg "i está entre 1 y 9"
+- endif
+- endif
+

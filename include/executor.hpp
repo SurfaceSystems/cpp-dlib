@@ -43,7 +43,7 @@ class Executor {
 public:
 	Executor();
 
-	void execute(const Instruction& ins);
+	void execute(std::vector<Instruction> ins);
 	std::vector<Variable> variables;
 	
 private:
@@ -54,5 +54,7 @@ private:
 
 	Variable* findVariable(const std::string& name);
 	std::string trim(const std::string& str);
+
+	bool evaluateCondition(const std::string& condition);
 };
 

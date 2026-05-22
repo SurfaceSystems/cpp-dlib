@@ -79,33 +79,112 @@ Executor::Executor() {
 	};	
 }
 
-void Executor::execute(const Instruction& ins) {
-	Instruction finalInstruction;
-	finalInstruction.name = ins.name;
+void Executor::execute(std::vector<Instruction> program) {
+	size_t ip = 0;
+	std::vector<size_t> whileStack;
 	
 	Evaluator evaluator(variables);
-		
-	for (const auto& arg : ins.args) {
-		std::string evaluated = evaluator.eval(arg);
-		finalInstruction.args.push_back(evaluated);
-	}
 	
-	auto it = handlers.find(ins.name);
-	if (it != handlers.end()) {
-		it->second(finalInstruction);
-	} else {
-		std::cout << "Unknown command: " << ins.name << std::endl;
+	while (ip < program.size()) {
+		const Instruction& ins = program[ip];
+		Instruction finalInstruction;
+		finalInstruction.name = ins.name;
+		finalInstruction.type = ins.type;
+		
+		for (const auto& arg : ins.args) {
+			std::string evaluated = evaluator.eval(arg);
+			finalInstruction.args.push_back(evaluated);
+		}
+		
+		switch (ins.type) {
+			case InstructionType::NORMAL: {
+				auto it = handlers.find(ins.name);
+				if (it != handlers.end()) {
+					it->second(finalInstruction);
+				} else {
+					std::cerr << "Unknown command: " << ins.name << std::endl;
+				}
+				ip++;
+				break;
+			}
+			
+			case InstructionType::IF: {
+				bool condition = evaluateCondition(finalInstruction.args[0]);
+				
+				if (!condition) {
+					ip = ins.jumpTarget;
+				} else {
+					ip++;
+				}
+				break;
+			}
+			
+			case InstructionType::ELSE: {
+				ip = ins.jumpTarget;
+				break;
+			}
+			
+			case InstructionType::ENDIF: {
+				ip++;
+				break;
+			}
+			
+			case InstructionType::WHILE: {
+				bool condition = evaluateCondition(finalInstruction.args[0]);
+				
+				if (!condition) {
+					ip = ins.jumpTarget;
+				} else {
+					whileStack.push_back(ip);
+					ip++;
+				}
+				break;
+			}
+			
+			case InstructionType::ENDWHILE: {
+				ip = ins.jumpTarget;
+				break;
+			}
+			
+			case InstructionType::BREAK: {
+				if (whileStack.empty()) {
+					throw std::runtime_error("BREAK outside loop");
+				}
+				size_t whileIp = whileStack.back();
+				ip = program[whileIp].jumpTarget;
+				whileStack.pop_back();
+				break;
+			}
+			
+			case InstructionType::CONTINUE: {
+				if (whileStack.empty()) {
+					throw std::runtime_error("CONTINUE outside loop");
+				}
+				ip = whileStack.back();
+				break;
+			}
+		}
 	}
 }
 
 Variable* Executor::findVariable(const std::string& name) {
-    auto it = std::find_if(variables.begin(), variables.end(),
-        [&name](const Variable& var) {
-            return var.getName() == name;
-        });
+	auto it = std::find_if(variables.begin(), variables.end(),
+		[&name](const Variable& var) {
+			return var.getName() == name;
+		});
 
-    if (it != variables.end()) {
-        return &(*it);
-    }
-    return nullptr;
+	if (it != variables.end()) {
+		return &(*it);
+	}
+	return nullptr;
+}
+
+bool Executor::evaluateCondition(const std::string& condition) {
+	Evaluator evaluator(variables);
+	std::string result = evaluator.eval(condition);
+
+	if (result.empty() || result == "false" || result == "0" || result == "no") {
+		return false;
+	}
+	return true;
 }
