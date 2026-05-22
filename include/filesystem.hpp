@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <filesystem>
 
 namespace fs {
 	bool createFolder(const std::string& path);
@@ -13,4 +14,7 @@ namespace fs {
 	bool write(const std::string& path, const std::string& text);
 	bool append(const std::string& path, const std::string& text);
 	std::string read(const std::string& path);
+
+	std::filesystem::path expandTilde(std::string path);
+	std::filesystem::path getHomeDir();
 }

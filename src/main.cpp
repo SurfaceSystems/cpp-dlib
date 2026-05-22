@@ -18,6 +18,7 @@
 #include "exceptions.hpp"
 #include "utils.hpp"
 #include "help.hpp"
+#include "filesystem.hpp"
 
 // Recieving the content of a script, parse it and run it.
 int run(const std::string& program) {
@@ -84,6 +85,37 @@ int main(int argc, char** argv) {
 
 		return 0;
 	} else if(command == "--repository") {
+	
+		if(argc < 3) { // Two arguments are needed at least
+			Log::error("Needed at least 2 arguments");
+			Log::info("Type \"dlib --repository help\" to get a list of commands");
+			return -1;
+		}
+
+		std::string subcommand = argv[2]; // Get the subcommand
+
+		if(subcommand == "add") {
+			// Add a repository for dlib
+
+			std::cout << fs::expandTilde("~/.dlib/") << std::endl << fs::getHomeDir() << std::endl;
+
+			std::filesystem::path repo-list-file = 
+
+			if(!File::exists(("~/.dlib/repo-list"))) { // Check if the repository list already exists
+				fs::createFolder(fs::expandTilde("~/.dlib/"));
+			}
+			return 0;
+		} else if(subcommand == "list") {
+		} else if(subcommand == "delete") {
+		} else if(subcommand == "grep") {
+		} else if(subcommand == "test") {
+		} else if(subcommand == "help") {}
+
+		// No valid subcommand was introduced
+		Log::error("Invalid subcommand.");
+		Log::info("Type \"dlib --repository help\" to get a list of subcommands.");
+		return -1;
+	
 	} else if(command == "--debug") {
 	} else if(command == "--validate") {
 		// Check if a script can be runned without any errors

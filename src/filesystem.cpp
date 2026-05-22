@@ -102,5 +102,26 @@ std::string read(const std::string& path) {
 	}
 }
 
+std::filesystem::path getHomeDir() {
+    const char* home = std::getenv("HOME");
+    if (home) return std::filesystem::path(home);
+#ifdef _WIN32
+    home = std::getenv("USERPROFILE");
+    if (home) return fs::path(home);
+    const char* drive = std::getenv("HOMEDRIVE");
+    const char* path = std::getenv("HOMEPATH");
+    if (drive && path) return fs::path(drive) / path;
+#endif
+    throw std::runtime_error("Couldn't find home directory.");
+}
+
+std::filesystem::path expandTilde(std::string path) {
+    if (!path.empty() && path[0] == '~') {
+        std::string rest = path.substr(1);
+        return getHomeDir() / rest;
+    }
+    return std::filesystem::path(path);
+}
+
 } // namespace fs
 
