@@ -129,6 +129,24 @@ int main(int argc, char** argv) {
 			Log::success("Repository succesfully added!");
 			return 0;
 		} else if(subcommand == "list") {
+			std::filesystem::path repolistfile = fs::getHomeDir() / ".dlib" / "repo-list"; 
+
+			if(!File::exists(repolistfile.string())) { // Check if the repository list exists
+				Log::error("There's no repository list.");
+				Log::error("If you want to add a repository, use \"add\" subcommand.");
+				return -1;
+			}
+
+			std::string list = File::read(repolistfile.string());
+
+			if(list.empty()) {
+				Log::warning("Empty repository list.");
+				return -1;
+			}
+			
+			std::cout << list << std::endl;
+
+			return 0;
 		} else if(subcommand == "delete") {
 		} else if(subcommand == "grep") {
 		} else if(subcommand == "test") {
