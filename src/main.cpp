@@ -171,8 +171,24 @@ int main(int argc, char** argv) {
 			
 			fs::replace(repolistfile.string(), url, "");
 			return 0;
-		} else if(subcommand == "grep") {
 		} else if(subcommand == "test") {
+			// Check if the user introduced an url to test 
+			if(argc < 4) {
+				Log::error("You need to introduce an URL to test.");
+				Log::info("Usage: dlib --repository test <URL>");
+				return -1;
+			}
+			
+			std::string url = argv[3]; // Get the URL
+
+			// Check if the url is an actual dlib repository
+			if(!Net::exists(url + "index")) {
+				Log::error("Not a valid dlib repository.");
+				return -1;
+			}
+
+			Log::success("Valid dlib repository.");
+			return 0;
 		} else if(subcommand == "help") {}
 
 		// No valid subcommand was introduced
