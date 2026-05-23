@@ -19,6 +19,7 @@
 #include "utils.hpp"
 #include "help.hpp"
 #include "filesystem.hpp"
+#include <filesystem>
 
 // Recieving the content of a script, parse it and run it.
 int run(const std::string& program) {
@@ -97,13 +98,35 @@ int main(int argc, char** argv) {
 		if(subcommand == "add") {
 			// Add a repository for dlib
 
-			std::cout << fs::expandTilde("~/.dlib/") << std::endl << fs::getHomeDir() << std::endl;
+			std::filesystem::path repolistfile = fs::getHomeDir() / ".dlib" / "repo-list"; 
+			std::filesystem::path dlibFolder = fs::getHomeDir() / ".dlib";
 
-			std::filesystem::path repo-list-file = 
-
-			if(!File::exists(("~/.dlib/repo-list"))) { // Check if the repository list already exists
-				fs::createFolder(fs::expandTilde("~/.dlib/"));
+			std::cout << repolistfile.string() << std::endl << dlibFolder.string() << std::endl;
+			
+			if(!File::exists(repolistfile.string())) { // Check if the repository list already exists
+				Log::warning("dlib config folder wasn't created, creating it now.");
+				fs::createFolder(dlibFolder.string()); // Create dlib folder if it doesn't exist
 			}
+
+			// Check if the user introduced an URL for a repository
+			if(argc < 4) {
+				Log::error("Needed an URL for the repository.");
+				Log::info("Usage: dlib --repository add <URL>");
+				return -1;
+			}
+
+			std::string url = argv[3]; // Get the URL
+
+			// Check if the url is an actual dlib repository
+			if(!Net::exists(url + "index")) {
+				Log::error("That url isn't a valid dlib repository.");
+				Log::info("Check for spelling errors.");
+				return -1;
+			}
+
+			// Add the repository to the repository list
+			fs::append(repolistfile.string(), url + "\n");
+			Log::success("Repository succesfully added!");
 			return 0;
 		} else if(subcommand == "list") {
 		} else if(subcommand == "delete") {
