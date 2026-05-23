@@ -129,5 +129,19 @@ bool contains(const std::string& filename, const std::string& text) {
 	return content.find(text) != std::string::npos; 
 }
 
+void replace(std::string filename, std::string search, std::string to) {
+    std::fstream f(filename, std::ios::in | std::ios::out);
+    std::string content((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+    f.close();
+    
+    size_t pos = 0;
+    while ((pos = content.find(search, pos)) != std::string::npos) {
+        content.replace(pos, search.length(), to);
+        pos += to.length();
+    }
+    
+    std::ofstream(filename, std::ios::trunc) << content;
+}
+
 } // namespace fs
 

@@ -19,4 +19,5 @@ namespace fs {
 	std::filesystem::path getHomeDir();
 
 	bool contains(const std::string& filename, const std::string& text);
+	void replace(std::string filename, std::string search, std::string to);
 }

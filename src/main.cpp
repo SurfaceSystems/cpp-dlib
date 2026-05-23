@@ -152,6 +152,25 @@ int main(int argc, char** argv) {
 
 			return 0;
 		} else if(subcommand == "delete") {
+			// Check if the user introduced an url to delete
+			if(argc < 4) {
+				Log::error("You need to introduce an URL to delete.");
+				Log::info("Usage: dlib --repository delete <URL>");
+				return -1;
+			}
+
+			std::string url = argv[3]; // Get the url
+
+			std::filesystem::path repolistfile = fs::getHomeDir() / ".dlib" / "repo-list"; 
+
+			if(!File::exists(repolistfile.string())) { // Check if the repository list exists
+				Log::error("There's no repository list.");
+				Log::error("If you want to add a repository, use \"add\" subcommand.");
+				return -1;
+			}
+			
+			fs::replace(repolistfile.string(), url, "");
+			return 0;
 		} else if(subcommand == "grep") {
 		} else if(subcommand == "test") {
 		} else if(subcommand == "help") {}
