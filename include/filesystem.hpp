@@ -17,4 +17,6 @@ namespace fs {
 
 	std::filesystem::path expandTilde(std::string path);
 	std::filesystem::path getHomeDir();
+
+	bool contains(const std::string& filename, const std::string& text);
 }

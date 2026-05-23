@@ -101,8 +101,6 @@ int main(int argc, char** argv) {
 			std::filesystem::path repolistfile = fs::getHomeDir() / ".dlib" / "repo-list"; 
 			std::filesystem::path dlibFolder = fs::getHomeDir() / ".dlib";
 
-			std::cout << repolistfile.string() << std::endl << dlibFolder.string() << std::endl;
-			
 			if(!File::exists(repolistfile.string())) { // Check if the repository list already exists
 				Log::warning("dlib config folder wasn't created, creating it now.");
 				fs::createFolder(dlibFolder.string()); // Create dlib folder if it doesn't exist
@@ -121,6 +119,12 @@ int main(int argc, char** argv) {
 			if(!Net::exists(url + "index")) {
 				Log::error("That url isn't a valid dlib repository.");
 				Log::info("Check for spelling errors.");
+				return -1;
+			}
+
+			// Check if the repository was already added
+			if(fs::contains(repolistfile.string(), url)) {
+				Log::warning("That repository is already added, not adding it again.");
 				return -1;
 			}
 

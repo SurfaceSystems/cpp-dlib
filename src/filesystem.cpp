@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <system_error>
+#include "utils.hpp"
 
 namespace fs {
 
@@ -121,6 +122,11 @@ std::filesystem::path expandTilde(std::string path) {
         return getHomeDir() / rest;
     }
     return std::filesystem::path(path);
+}
+
+bool contains(const std::string& filename, const std::string& text) {
+	std::string content = File::read(filename);
+	return content.find(text) != std::string::npos; 
 }
 
 } // namespace fs
