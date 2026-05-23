@@ -135,6 +135,7 @@ int main(int argc, char** argv) {
 			// Add the repository to the repository list
 			fs::append(repolistfile.string(), url + "\n");
 			Log::success("Repository succesfully added!");
+			Log::info("Remember to run \"dlib --repository update\" to update the scripts.");
 			return 0;
 		} else if(subcommand == "list") {
 			std::filesystem::path repolistfile = fs::getHomeDir() / ".dlib" / "repo-list"; 
@@ -250,7 +251,8 @@ int main(int argc, char** argv) {
 			std::cout << ASCII_BOLD << "dlib --repository add <URL>: " << ASCII_RESET << "Add a repository." << std::endl <<
 					 ASCII_BOLD << "dlib --repository list: " << ASCII_RESET << "List all repositories added." << std::endl <<
 					 ASCII_BOLD << "dlib --repository delete <URL>: " << ASCII_RESET << "Delete a repository from the repository list." << std::endl <<
-					 ASCII_BOLD << "dlib --repository test <URL>: " << ASCII_RESET << "Check if an URL is a valid repository." << std::endl;
+					 ASCII_BOLD << "dlib --repository test <URL>: " << ASCII_RESET << "Check if an URL is a valid repository." << std::endl <<
+					 ASCII_BOLD << "dlib --repository update: " << ASCII_RESET << "Update remote scripts." << std::endl;
 			return 0;
 		}
 

@@ -19,6 +19,12 @@ namespace Help {
 		},
 		{
 			"<url>", "Run a script from the internet."
+		},
+		{
+			"--repository help", "Get a list of commands for repository management."
+		},
+		{
+			"install <script>", "Run an script from a repository."
 		}
 	};
 
