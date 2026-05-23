@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>dlib</title>
+    <meta name="description" content="dlib: lightweight, modern C++ library and program downloader." />
+    <style>
+        :root{
+            --bg:#0f1720; --card:#0b1220; --muted:#98a0b3; --accent:#4f9cff; --glass:rgba(255,255,255,0.03);
+            --radius:10px; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color-scheme: dark;
+        }
+        *{box-sizing:border-box}
+        body{margin:0;background:linear-gradient(180deg,#071028 0%, #06121c 100%);color:#e6eef8;line-height:1.6}
+        .container{max-width:1100px;margin:36px auto;padding:28px}
+        header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+        .brand{display:flex;align-items:center;gap:12px}
+        .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#2b70ff,#70d0ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#042a3a}
+        h1{margin:0;font-size:1.6rem}
+        nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-size:0.95rem}
+        .hero{display:grid;grid-template-columns:1fr 340px;gap:24px;margin-top:22px}
+        .card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:0 6px 30px rgba(2,8,23,0.6)}
+        .lead{color:var(--muted);margin:12px 0 18px}
+        .cta{display:inline-block;background:var(--accent);color:#05263b;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:600}
+        .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;color:var(--muted);font-size:0.9rem}
+        .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
+        .feature{background:var(--glass);padding:12px;border-radius:8px}
+        pre{background:#071428;padding:14px;border-radius:8px;overflow:auto;margin:0;color:#cde6ff}
+        code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Liberation Mono", monospace;font-size:0.92rem}
+        footer{margin-top:28px;padding:18px 0;color:var(--muted);font-size:0.9rem;text-align:center}
+        @media (max-width:880px){.hero{grid-template-columns:1fr}nav a{display:none}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <div class="logo">dlib</div>
+                <div>
+                    <h1>dlib</h1>
+                    <div class="meta">Lightweight C++ library and program downloader • Built for performance</div>
+                </div>
+            </div>
+            <nav>
+                <a href="#about">About</a>
+                <a href="#install">Install</a>
+                <a href="#quickstart">Quick Start</a>
+                <a href="https://github.com/SurfaceSystems/cpp-dlib" target="_blank" rel="noopener">GitHub</a>
+            </nav>
+        </header>
+
+        <main class="hero">
+            <section class="card">
+                <h2>Purpose</h2>
+                <p class="lead">dlib is a lightweight C++ programming language designed for library and program downloading.</p>
+
+                <div class="features" aria-hidden="false">
+                    <div class="feature">
+                        <strong>Simple</strong>
+                        <div class="meta">Easy syntax to create scripts for programs and libraries.</div>
+                    </div>
+                    <div class="feature">
+                        <strong>Open-source</strong>
+                        <div class="meta">GPL v3.0 Licensed and free to use and modify.</div>
+                    </div>
+                    <div class="feature">
+                        <strong>Cross-platform</strong>
+                        <div class="meta">Native for Linux and Windows</div>
+                    </div>
+                    <div class="feature">
+                        <strong>Lightweight</strong>
+                        <div class="meta">Just downloading dlib executable you can use it for anything.</div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="card">
+                <h3>Get it</h3>
+                <p class="meta">Clone the repo and build from source</p>
+                <pre><code>git clone https://github.com/SurfaceSystems/cpp-dlib.git
+cd cpp-dlib
+# Linux:
+make install
+# Windows (PowerShell):
+.\build.ps1 -Install
+                </code></pre>
+
+                <p style="margin-top:12px"><a class="cta" href="https://github.com/SurfaceSystems/cpp-dlib" target="_blank" rel="noopener">Open on GitHub</a></p>
+                <div style="margin-top:14px;color:var(--muted);font-size:0.9rem">
+                    License: GNU GPL v3.0 (see repo)
+                </div>
+            </aside>
+        </main>
+
+        <section id="install" class="card" style="margin-top:20px">
+            <h2>Install</h2>
+            <p class="lead">You can install dlib by cloning the repository and building from source.</p>
+
+            <pre><code>git clone https://github.com/SurfaceSystems/cpp-dlib.git
+cd cpp-dlib
+# Linux:
+make install
+# Windows (PowerShell):
+.\build.ps1 -Install</code></pre>
+        </section>
+
+        <section id="quickstart" class="card" style="margin-top:16px">
+            <h2>Quick start</h2>
+            <p class="lead">Add dlib official index and update scripts.</p>
+
+            <pre><code>dlib --repository add elitees.github.io/dlib-index
+dlib --repository update</code></pre>
+
+            <p style="margin-top:10px;color:var(--muted)">Add another repository if you need it.</p>
+        </section>
+
+        <section id="contribute" class="card" style="margin-top:16px">
+            <h2>Contributing</h2>
+            <p class="lead">Contributions and issues are welcome. Follow repository guidelines for coding style, tests, and PR workflow.</p>
+            <ul style="margin:8px 0 0 18px;color:var(--muted)">
+                <li>Fork the repo and open a pull request</li>
+                <li>Run and add tests for new features</li>
+                <li>Write clear commit messages</li>
+            </ul>
+        </section>
+
+        <footer>
+            Repository: <a href="https://github.com/SurfaceSystems/cpp-dlib" target="_blank" rel="noopener" style="color:var(--accent)">SurfaceSystems/cpp-dlib</a>
+ • © 2026Project contributors
+        </footer>
+    </div>
+</body>
+</html>
