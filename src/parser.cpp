@@ -8,7 +8,7 @@
 #include <stack>
 #include "executor.hpp"
 #include "exceptions.hpp"
-
+#include <iomanip>
 
 std::vector<Instruction> Parser::parse(const std::string& script) {
 	std::vector<Instruction> program;
@@ -206,5 +206,37 @@ std::vector<std::string> Parser::parseArgumentsByComma(const std::string& line) 
 	}
 	
 	return args;
+}
+
+std::vector<Instruction> simpleParse(const std::string& text) {
+	std::vector<Instruction> program;
+
+	std::istringstream stream(text);
+	std::string line;
+
+	while(std::getline(stream, line)) {
+		if(line.empty()) continue;
+		if(line.c_str()[0] == '#') continue;
+
+		if(line.substr(0,2) != "- ") {
+			continue;
+		}
+
+		line = line.substr(2);
+		
+		std::istringstream ls(line);
+
+		Instruction ins;
+		ls >> ins.name;
+
+		std::string arg;
+		while(ls >> std::quoted(arg)) {
+			ins.args.push_back(arg);
+		}
+
+		program.push_back(ins);
+	}
+
+	return program;
 }
 

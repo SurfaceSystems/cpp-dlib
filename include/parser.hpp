@@ -18,3 +18,5 @@ private:
 	std::vector<std::string> parseArgumentsByComma(const std::string& line);
 };
 
+std::vector<Instruction> simpleParse(const std::string& text);
+

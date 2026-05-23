@@ -9,6 +9,7 @@ file(GLOB SRCS "src/*.cpp")
 add_executable(dlib ${SRCS})
 
 target_include_directories(dlib PRIVATE include/)
+target_include_directories(dlib PRIVATE external/)
 
 find_package(CURL REQUIRED)
 
