@@ -21,3 +21,4 @@ namespace Net {
 	extern std::string read(const std::string& url);
 }
 
+std::string validateUrl(const std::string& url);

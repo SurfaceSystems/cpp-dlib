@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
 				return -1;
 			}
 
-			std::string url = argv[3]; // Get the URL
+			std::string url = validateUrl(argv[3]); // Get the URL
 
 			// Check if the url is an actual dlib repository
 			if(!Net::exists(url + "index")) {
@@ -159,7 +159,7 @@ int main(int argc, char** argv) {
 				return -1;
 			}
 
-			std::string url = argv[3]; // Get the url
+			std::string url = validateUrl(argv[3]); // Get the url
 
 			std::filesystem::path repolistfile = fs::getHomeDir() / ".dlib" / "repo-list"; 
 
@@ -179,7 +179,7 @@ int main(int argc, char** argv) {
 				return -1;
 			}
 			
-			std::string url = argv[3]; // Get the URL
+			std::string url = validateUrl(argv[3]); // Get the URL
 
 			// Check if the url is an actual dlib repository
 			if(!Net::exists(url + "index")) {

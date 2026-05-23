@@ -151,3 +151,17 @@ std::string File::read(const std::string& filename) {
 	return result;
 }
 
+std::string validateUrl(const std::string& url) {
+	std::string ret = url;
+	
+	if(ret.back() != '/') {
+		ret += "/";
+	} 
+
+	if(ret.substr(0,8) != "https://") {
+		ret = "https://" + ret;
+	}
+
+	return ret;
+}
+
