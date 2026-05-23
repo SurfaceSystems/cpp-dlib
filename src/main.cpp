@@ -189,14 +189,19 @@ int main(int argc, char** argv) {
 
 			Log::success("Valid dlib repository.");
 			return 0;
-		} else if(subcommand == "help") {}
+		} else if(subcommand == "help") {
+			std::cout << ASCII_BOLD << "dlib --repository add <URL>: " << ASCII_RESET << "Add a repository." << std::endl <<
+				     ASCII_BOLD << "dlib --repository list: " << ASCII_RESET << "List all repositories added." << std::endl <<
+				     ASCII_BOLD << "dlib --repository delete <URL>: " << ASCII_RESET << "Delete a repository from the repository list." << std::endl <<
+				     ASCII_BOLD << "dlib --repository test <URL>: " << ASCII_RESET << "Check if an URL is a valid repository." << std::endl;
+			return 0;
+		}
 
 		// No valid subcommand was introduced
 		Log::error("Invalid subcommand.");
 		Log::info("Type \"dlib --repository help\" to get a list of subcommands.");
 		return -1;
 	
-	} else if(command == "--debug") {
 	} else if(command == "--validate") {
 		// Check if a script can be runned without any errors
 
