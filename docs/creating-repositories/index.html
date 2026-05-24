@@ -23,20 +23,74 @@
 
         <hr>
 
+        <p>Index:</p>
         <ol>
             <li><a href="#what-is-a-repository">What is a repository?</a></li>
+            <li><a href="#structure">How the structure of a dlib repository is?</a></li>
+            <li><a href="#index">The index file</a></li>
+            <li><a href="#scripts">The script files</a></li>
+            <li><a href="#publishing">Publishing a repository</a></li>
+            <li><a href="#maintain">Maintaining a repository</a></li>
         </ol>
 
 
         <p>Here, you'll learn how to create a dlib repository, how to make it public and how to mantain it.</p>
 
-        <h2 id="what-is-a-repository">What is a repository?</h2>
+        <h2 id="what-is-a-repository">1. What is a repository?</h2>
         <p>A dlib repository is a place on internet that dlib can scan to get scripts.</p>
         <p>An example of a repository is <code>https://elitees.github.io/dlib-index/</code></p>
         <p>There's no HTML there, but there's a file in <code>https://elitees.github.io/dlib-index/index</code> that contains a dlib script that dlib can read to extract where the scripts are.</p>
 
-        <p>You can check the code</p>
+        <p>You can check the code of that repository in <a href="https://github.com/elitees/dlib-index">https://github.com/elitees/dlib-index</a>.</p>
 
+        <h2 id="structure">2. How the structure of a dlib repository is?</h2>
+        <p>The structure of a dlib repository is quite simple. It consists of a main index file that contains the list of available scripts and their locations.</p>
+
+        <p>Here's a tree of that repository:</p>
+        <pre><code>dlib-index/
+├── index
+├── mank-git/
+│   └── latest.dls
+├── test/
+│   └── v0.0.1.dls
+└── mank-source/
+    └── v0.1.0.dls
+</code></pre>
+
+        <h2 id="index">3. The index file</h2>
+
+        <p>In that example, the main index file is <code>index</code>, which contains the list of available scripts and their locations. The other files are the scripts themselves.</p>
+        <p>Here's an example of the <code>index</code> file:</p>
+        <pre><code>- script "mank-git" "mank-git/" "latest.dls"
+- script "test" "test/" "v0.0.1.dls"
+- script "mank-source" "mank-source/" "v0.1.0.dls"</code></pre>
+
+        <p>The <code>index</code> file uses a dlib-like syntax to define each script and its location. The first field of the <code>script</code> command is the name of the script, which the user is going to use doing <code>dlib install script-name</code>. The second field is the path to the script directory, and the third field is the default filename of the script if the user doesn't specify a version.</p>
+
+        <h2 id="scripts">4. The script files</h2>
+        <p>The scripts are saved on the folder where the index file says. dlib is going to read the <code>index</code> file, then it processes the filename and version in order to locate the script. Here's a graphical way explaining it:</p>
+        <pre><code>user: dlib install mank-git
+-> dlib: reads local script index
+-> dlib: detects that "mank-git" script is located at "example.com/dlib-index/mank-git/" and as the user didn't specify a version it should use "latest.dls"
+-> dlib: reads "example.com/dlib-index/mank-git/latest.dls"
+-> dlib: processes the script and runs it</code></pre>
+
+            <pre><code>user: dlib install mank-source:v0.1.0
+-> dlib: reads local script index
+-> dlib: detects that "mank-source" script is located at "example.com/dlib-index/mank-source/" and as the user specified the version "v0.1.0" it should use "v0.1.0.dls"
+-> dlib: reads "example.com/dlib-index/mank-source/v0.1.0.dls"
+-> dlib: processes the script and runs it</code></pre>
+        
+        <p>Normally you wouldn't need to create those <code>.dls</code> files as you only mantain the repository, but if you need to create those files, read the <a href="../creating-scripts/">creating scripts</a> guide.</p>
+
+        <h2 id="publishing">5. Publishing a repository</h2>
+        <p>To publish a dlib repository, you need to make it accessible over the internet. You can use a static file hosting service like GitHub Pages, GitLab Pages, or any other service that allows you to host static files.</p>
+        <p>Then, you can let users add that repository by letting them know the path of the folder in which the <code>index</code> file is. If the file is at <code>https://username.github.io/mydlib-repo/index</code> the repository path is <code>https://username.github.io/mydlib-repo/</code>.</p>
+        <p>Users can access to it by running <code>dlib --repository add https://username.github.io/mydlib-repo/</code>.</p>
+
+        <h2 id="maintain">6. Maintaining a repository</h2>
+        <p>Once you have published your dlib repository, you need to maintain it by keeping the <code>index</code> file up to date with the latest scripts and their locations.</p>
+        <p>You should also know about new dlib updates as the syntax may change or require manual interventions to the scripts.</p>
         <footer>
             <hr>
             <center>
