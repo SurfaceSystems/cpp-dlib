@@ -1,6 +1,5 @@
 .cache/
 build/
 .vscode/
-note
 *.bin
 script.dls
