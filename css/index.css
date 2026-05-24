@@ -1,0 +1,22 @@
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+body a.list {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+body a.list h2 {
+    margin: 0;
+}
+
+footer {
+    margin-top: 20px;
+}
