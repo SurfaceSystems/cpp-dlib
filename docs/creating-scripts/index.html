@@ -10,7 +10,7 @@
     </head>
     <body>
         <center>
-            <h1>dlib — Documentation</h1>
+            <h1>dlib — Documentation — Creating scripts</h1>
         </center>
         <nav>
             <ul>
@@ -23,13 +23,98 @@
 
         <hr>
 
-        <p>On this page you will find the documentation for dlib. You can see from how to run scripts to how to create a dlib repository for sharing scripts and how dlib works.</p>
+        <p>Index:</p>
+        <ol>
+            <li><a href="#what-is-a-script">What is a script?</a></li>
+            <li><a href="#syntax">Script syntax</a></li>
+            <li><a href="#running">Running a script</a></li>
+        </ol>
 
-        <p>If you have just installed dlib, I recommend you see the <a href="getting-started/">Getting Started</a> guide.</p>
+        <p>Here, you'll learn how to create a dlib script.</p>
 
-        <p>If you want to create a dlib repository for sharing scripts, you can follow the <a href="creating-repositories/">Creating Repositories</a> guide.</p>
+        <h2 id="what-is-a-script">1. What is a script?</h2>
+        <p>A dlib script is a file with <code>.dls</code> extension that contains the instructions to download and install a program.</p>
+        <p>Here's an example of a dlib script:</p>
+        <pre><code>- msg "Hello, world!"</code></pre>
+        <p>You can save this script like <code>script.dls</code>.</p>
+        <p>This script simply prints "Hello, world!" when executed.</p>
 
-        <p>If you want to create a dlib script, you can follow the <a href="creating-scripts/">Creating Scripts</a> guide.</p>
+        <p>You can run this script by running <code>dlib script.dls</code>.</p>
+
+        <h2 id="syntax">2. Script syntax</h2>
+        <p>dlib scripts use a simple syntax to define their instructions. Each line represents a command that dlib will execute.</p>
+        <p>All the instructions are prefixed with a dash (<code>-</code>) and followed by the command and its arguments.</p>
+        <p>The arguments are separated by commas, unlike <code>index</code> files on repositories.</p>
+
+        <h2 id="running">3. Running a script</h2>
+        <p>To run a dlib script, you can use the <code>dlib</code> command followed by the path to the script file.</p>
+        <p>You can also use the <code>run</code> argument to run scripts on the internet.</p>
+
+        <h2 id="reference">4. Full reference</h2>
+        <p>Here you'll learn all the dlib commands and their usage.</p>
+        <p>Index:</p>
+        <ol>
+            <li><a href="#msg">msg</a></li>
+            <li><a href="#logging">log, error, warning, info, success</a></li>
+            <li><a href="#downloading">download</a></li>
+            <li><a href="#fileworking">mkdir, delete, move, copy, write, append</a></li>
+            <li><a href="#variables">Variables</a></li>
+        </ol>
+        <h3 id="msg">msg</h3>
+        <p>The <code>msg</code> command prints a message to the user.</p>
+        <p>Usage:</p>
+        <pre><code>- msg "Your message here"</code></pre>
+        <p>Example:</p>
+        <pre><code>- msg "Hello, world!"</code></pre>
+        <p>This command will print "Hello, world!" to the user.</p>
+
+        <h3 id="logging">log, error, warning, info, success</h3>
+        <p>These commands print messages to the user with different levels of severity.</p>
+        <p>Usage:</p>
+        <pre><code>- log "Your log message here"</code></pre>
+        <pre><code>- error "Your error message here"</code></pre>
+        <pre><code>- warning "Your warning message here"</code></pre>
+        <pre><code>- info "Your info message here"</code></pre>
+        <pre><code>- success "Your success message here"</code></pre>
+        <p>Example:</p>
+        <pre><code>- log "This is a log message"
+- error "This is an error message"
+- warning "This is a warning message"
+- info "This is an info message"
+- success "This is a success message"</code></pre>
+        <p>This will print the corresponding messages to the user with the appropriate formatting.</p>
+
+        <h3 id="downloading">download</h3>
+        <p>The <code>download</code> command downloads a file from a URL and saves it to a specified location.</p>
+        <p>Usage:</p>
+        <pre><code>- download "https://example.com/file.zip", "path/to/save/file.zip"</code></pre>
+        <p>Example:</p>
+        <pre><code>- download "https://example.com/file.zip", "file.zip"</code></pre>
+        <p>This command will download the file from the specified URL and save it as <code>file.zip</code> in the current directory.</p>
+        
+        <h3 id="fileworking">mkdir, delete, move, copy, write, append</h3>
+        <p>These commands allow you to perform various file operations.</p>
+        <p>Usage:</p>
+        <pre><code>- mkdir "path/to/new/directory"</code></pre>
+        <pre><code>- delete "path/to/file"</code></pre>
+        <pre><code>- move "path/to/source", "path/to/destination"</code></pre>
+        <pre><code>- copy "path/to/source", "path/to/destination"</code></pre>
+        <pre><code>- write "path/to/file", "content"</code></pre>
+        <pre><code>- append "path/to/file", "content"</code></pre>
+        <p>Example:</p>
+        <pre><code>- mkdir "new_folder"
+- write "new_folder/hello.txt", "Hello, world!"
+- append "new_folder/hello.txt", "\nWelcome to dlib scripting!"</code></pre>
+        <p>This will create a new folder called <code>new_folder</code>, create a file called <code>hello.txt</code> inside that folder with the content "Hello, world!", and then append "Welcome to dlib scripting!" to that file.</p>
+
+        <h3 id="variables">Variables</h3>
+        <p>You can use variables in your scripts to store and manipulate data.</p>
+        <p>Usage:</p>
+        <pre><code>- set variable_name, "value"</code></pre>
+        <p>Example:</p>
+        <pre><code>- set name, "Alice"
+- msg "Hello, $name!"</code></pre>
+        <p>This will print "Hello, Alice!" to the user.</p>
 
         <footer>
             <hr>
