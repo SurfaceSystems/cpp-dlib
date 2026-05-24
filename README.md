@@ -36,7 +36,8 @@ The third one searched for a file called `hello-world.dls` at the folder `projec
 You can check dlib version by running `dlib --version`, so be careful to not name a file `--version`.
 
 ## Help and documentation
-More help about how to create `.dls` files comming soon.
+Here you can find documentation:
+[https://surfacesystems.github.io/cpp-dlib/docs/](https://surfacesystems.github.io/cpp-dlib/docs/)
 
 ## License
 This project is licensed with GNU GPL v3.
