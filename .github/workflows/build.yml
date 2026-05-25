@@ -1,0 +1,68 @@
+name: Build and Package
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev
+
+    - name: Configure and build
+      run: |
+        make configure
+        make build
+
+    - name: Upload Linux binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: dlib-linux
+        path: build/dlib
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies (vcpkg)
+      run: |
+        vcpkg install curl:x64-windows
+        echo "CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
+
+    - name: Configure and build (Release)
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${env:CMAKE_TOOLCHAIN_FILE}
+        cmake --build build --config Release
+
+    - name: Upload Windows executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: dlib-windows
+        path: build/Release/dlib.exe
+
+    - name: Build installer with CPack (NSIS)
+      run: |
+        choco install nsis -y
+        cd build
+        echo 'set(CPACK_GENERATOR "NSIS")' >> CPackConfig.cmake
+        echo 'set(CPACK_PACKAGE_NAME "dlib")' >> CPackConfig.cmake
+        echo 'set(CPACK_PACKAGE_VERSION "1.0.0")' >> CPackConfig.cmake
+        echo 'set(CPACK_NSIS_DISPLAY_NAME "dlib")' >> CPackConfig.cmake
+        echo 'set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")' >> CPackConfig.cmake
+        echo 'set(CPACK_PACKAGE_EXECUTABLES "dlib" "dlib")' >> CPackConfig.cmake
+        echo 'install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/Release/dlib.exe DESTINATION bin)' >> CPackConfig.cmake
+        cpack -C Release --config CPackConfig.cmake
+
+    - name: Upload installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: dlib-installer
+        path: build/dlib-*.exe
+

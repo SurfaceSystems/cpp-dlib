@@ -1,0 +1,26 @@
+BUILD_DIR = build
+BINARY = $(BUILD_DIR)\Release\dlib.exe
+PREFIX = %USERPROFILE%\.local
+
+.PHONY: all build configure install uninstall clean
+
+all: build
+
+configure:
+	if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
+	cd $(BUILD_DIR) && cmake .. -DCMAKE_BUILD_TYPE=Release
+
+build: configure
+	cd $(BUILD_DIR) && cmake --build . --config Release
+
+install: build
+	if not exist "$(PREFIX)\bin" mkdir "$(PREFIX)\bin"
+	copy $(BINARY) "$(PREFIX)\bin\dlib.exe"
+	@echo Installed to $(PREFIX)\bin
+
+uninstall:
+	del /Q "$(PREFIX)\bin\dlib.exe" 2>nul
+
+clean:
+	if exist $(BUILD_DIR) rmdir /S /Q $(BUILD_DIR)
+
