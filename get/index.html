@@ -23,7 +23,8 @@
         <hr>
 
         <h1>Linux</h1>
-        <p>The most simple way to get dlib on Linux is by compiling from source.</p>
+        <h2>1. Running <code>make install</code></h2>
+        <p>The most simple way to install dlib on Linux is by running the Makefile.</p>
         <p>Requirements:</p>
         <ul>
             <li>C++17</li>
@@ -41,8 +42,29 @@
         </ol>
         <p>You can check if dlib was installed successfully by running: <code>dlib --version</code></p>
 
+        <h2>2. Compiling with CMake</h2>
+        <p>You can just build dlib and then install it manually.</p>
+        <p>Requirements:</p>
+        <ul>
+          <li>C++17</li>
+          <li>cmake</li>
+          <li>git</li>
+          <li>curl</li>
+        </ul>
+        
+        <p>Steps:</p>
+        <ol>
+          <li><code>git clone https://github.com/SurfaceSystems/cpp-dlib.git</code></li>
+          <li><code>cd cpp-dlib</code></li>
+          <li><code>mkdir build &amp;&amp; cmake-B build</code></li>
+          <li><code>cmake --build build</code></li>
+        </ol>
 
+        <p>The executable is going to be generated at <code>build/dlib</code>.</p>
+        
         <h1>Windows</h1>
+
+        <h2>1. Downloading pre-compiled binaries</h2>
         <p>On Windows, the simplest way to get dlib is by downloading a pre-compiled binary.</p>
 
         <p>You can find pre-compiled binaries on:</p>
@@ -55,7 +77,32 @@
 
         <p>You can check if dlib was succesfully installed by running <code>dlib --version</code></p>
 
-        <p>By the moment, you can't compile from source on Windows.</p>
+        <h2>2. Building from source (MINGw)</h2>
+        <p>If you have the tools to compile, you can use <code>mingw-make</code> to compile dlib on Windows.</p>
+        <p>Requirements:</p>
+        <ul>
+          <li>git</li>
+          <li>cmake</li>
+          <li>mingw-64 or msvc compiler</li>
+          <li>libcurl</li>
+        </ul>
+
+        <p>Steps:</p>
+        <ol>
+            <li><code>git clone https://github.com/SurfaceSystems/cpp-dlib.git</code></li>
+            <li><code>cd cpp-dlib</code></li>
+            <li><code>make install</code></li>
+        </ol>
+
+        <h2>3. Building from source (cmd.exe)</h2>
+        <p>If you have the time to install all this requirements, I'm impressed. But here's how you can compile dlib without any UNIX-like environment.</p>
+        <p>Requirements:</p>
+        <ul>
+          <li>Visual Studio</li>
+          <li>CMake</li>
+          <li>libcurl</li>
+          <li>Windows SDK</li>
+        </ul>
 
         <footer>
             <hr>
