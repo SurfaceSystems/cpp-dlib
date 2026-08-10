@@ -15,5 +15,8 @@ find_package(CURL REQUIRED)
 
 target_link_libraries(dlib PRIVATE CURL::libcurl)
 
-target_compile_options(dlib PRIVATE -Wall -Wextra)
-
+if(MSVC)
+    add_compile_options(/W4 /WX)  # Equivalent to -Wall -Wextra
+else()
+    add_compile_options(-Wall -Wextra)
+endif()
