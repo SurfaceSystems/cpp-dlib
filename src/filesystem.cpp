@@ -5,6 +5,8 @@
 #include <sys/stat.h>
 #include <system_error>
 #include "utils.hpp"
+#include <string>
+#include <cstdlib>
 
 namespace fs {
 

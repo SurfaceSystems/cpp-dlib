@@ -16,7 +16,16 @@ find_package(CURL REQUIRED)
 target_link_libraries(dlib PRIVATE CURL::libcurl)
 
 if(MSVC)
-    add_compile_options(/W4 /WX)  # Equivalent to -Wall -Wextra
+    target_compile_definitions(dlib PRIVATE 
+        _CRT_SECURE_NO_WARNINGS
+        _SCL_SECURE_NO_WARNINGS
+    )
+    
+    target_compile_options(dlib PRIVATE 
+        /W4 
+        /wd4267
+        /wd4996
+    )
 else()
     add_compile_options(-Wall -Wextra)
 endif()
